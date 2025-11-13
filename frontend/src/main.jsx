@@ -4,6 +4,7 @@ import './index.css';
 
 import { RouterProvider } from 'react-router-dom';
 import router from './router/router';
+import 'sweetalert2/dist/sweetalert2.js';
 
 import { store } from './redux/store';
 import { Provider } from 'react-redux';
