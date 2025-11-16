@@ -1,18 +1,39 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { FaGoogle } from 'react-icons/fa';
 
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../context/AuthContext';
 
 const Login = () => {
+  const [message, setMessage] = useState('');
+  const { loginUser, signInWithGoogle } = useAuth();
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
-  const [message, setMessage] = useState('');
+  const onSubmit = async (data) => {
+    try {
+      await loginUser(data.email, data.password);
+      alert('Login sucessfull');
+      navigate('/');
+    } catch (error) {
+      setMessage('Please provide valid email and password');
+    }
+  };
+  const handleGoogleSignIn = async () => {
+    try {
+      await signInWithGoogle();
+      alert('Login with google sucessful');
+      navigate('/');
+    } catch (error) {
+      alert('Google sigin failed');
+    }
+  };
+
   return (
     <div className="h-[calc(100vh-120px)] flex items-center justify-center">
       <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -50,7 +71,7 @@ const Login = () => {
           </div>
 
           {message && (
-            <p className="text-red-500 text-xs italic mb-3">Message</p>
+            <p className="text-red-500 text-xs italic mb-3">{message}</p>
           )}
 
           <div className="flex flex-wrap space-y-2.5 items-center justify-between">
@@ -72,7 +93,7 @@ const Login = () => {
         <div className="mt-4">
           <button
             className="w-full flex flex-wrap gap-1 items-center justify-center bg-secondary hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            // onClick={handleGoogleSignIn}
+            onClick={handleGoogleSignIn}
           >
             <FaGoogle className="mr-2" />
             Sign in with Google

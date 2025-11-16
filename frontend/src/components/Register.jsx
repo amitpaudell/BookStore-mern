@@ -3,16 +3,27 @@ import { Link } from 'react-router-dom';
 import { FaGoogle } from 'react-icons/fa';
 
 import { useForm } from 'react-hook-form';
+import { useAuth } from '../context/AuthContext';
 
 const Register = () => {
+  const [message, setMessage] = useState('');
+  const { registerUser } = useAuth();
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm();
-  const onSubmit = (data) => console.log(data);
-  const [message, setMessage] = useState('');
+  const onSubmit = async (data) => {
+    console.log(data);
+    try {
+      await registerUser(data.email, data.password);
+      alert('User registration sucessfull');
+    } catch (error) {
+      setMessage('Please provide valid email and password');
+    }
+  };
+
   return (
     <div className="h-[calc(100vh-120px)] flex items-center justify-center">
       <div className="w-full max-w-sm mx-auto bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
@@ -50,7 +61,7 @@ const Register = () => {
           </div>
 
           {message && (
-            <p className="text-red-500 text-xs italic mb-3">Message</p>
+            <p className="text-red-500 text-xs italic mb-3">{message}</p>
           )}
 
           <div className="flex flex-wrap space-y-2.5 items-center justify-between">
