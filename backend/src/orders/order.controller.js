@@ -10,11 +10,3 @@ exports.createOrder = async (req, res, next) => {
     res.status(500).json({ message: 'Failed to create order' });
   }
 };
-
-exports.getOrderByEmail = async (req, res, next) => {
-  try {
-    const 
-  } catch (error) {
-
-  }
-};
