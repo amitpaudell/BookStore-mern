@@ -10,6 +10,7 @@ import PrivateRoute from './PrivateRoute';
 import OrdersPage from '../pages/OrdersPage';
 import AdminRoute from './AdminRoute';
 import AdminLogin from '../components/AdminLogin';
+import DashBoardLayOut from '../pages/dashboard/DashBoardLayOut';
 
 const router = createBrowserRouter([
   {
@@ -48,7 +49,7 @@ const router = createBrowserRouter([
     path: '/dashboard',
     element: (
       <AdminRoute>
-        <div>Admin Dashboard</div>
+        <DashBoardLayOut></DashBoardLayOut>
       </AdminRoute>
     ),
     children: [

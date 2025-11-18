@@ -48,15 +48,13 @@ router.get('/', async (req, res) => {
     ]);
 
     // Result summary
-    res
-      .status(200)
-      .json({
-        totalOrders,
-        totalSales: totalSales[0]?.totalSales || 0,
-        trendingBooks,
-        totalBooks,
-        monthlySales,
-      });
+    res.status(200).json({
+      totalOrders,
+      totalSales: totalSales[0]?.totalSales || 0,
+      trendingBooks,
+      totalBooks,
+      monthlySales,
+    });
   } catch (error) {
     console.error('Error fetching admin stats:', error);
     res.status(500).json({ message: 'Failed to fetch admin stats' });
