@@ -10,8 +10,8 @@ router.get('/', bookController.getBooks);
 
 router.get('/:id', bookController.getBook);
 
-router.put('/edit/:id', bookController.updateBook);
+router.put('/edit/:id', verifyAdminToken, bookController.updateBook);
 
-router.delete('/:id', bookController.deleteBook);
+router.delete('/:id', verifyAdminToken, bookController.deleteBook);
 
 module.exports = router;
