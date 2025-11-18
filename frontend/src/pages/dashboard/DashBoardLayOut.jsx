@@ -1,38 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { HiViewGridAdd } from 'react-icons/hi';
 import { MdOutlineManageHistory } from 'react-icons/md';
-import { MdIncompleteCircle } from 'react-icons/md';
-import axios from 'axios';
-import getBaseURL from '../../utils/baseURL';
-import { Outlet } from 'react-router-dom';
-import Loading from '../../components/Loading';
-const DashBoardLayOut = () => {
-  const [loading, setLoading] = useState(true);
-  const [data, setData] = useState({});
 
+import { Outlet } from 'react-router-dom';
+
+const DashBoardLayOut = () => {
   function handleLogout() {}
 
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const response = await axios.get(`${getBaseURL()}/api/admin`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`,
-            'Content-Type': 'application/json',
-          },
-        });
-        setData(response.data);
-        setLoading(false);
-      } catch (error) {
-        console.error('ERROR', error);
-        setLoading(false);
-      }
-    };
-    fetchData();
-  }, []);
-
-  if (loading) return <Loading></Loading>;
   return (
     <section className="flex md:bg-gray-100 min-h-screen overflow-hidden">
       <aside className="hidden sm:flex sm:flex-col">
