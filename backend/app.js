@@ -9,7 +9,10 @@ require('dotenv').config();
 app.use(express.json());
 app.use(
   cors({
-    origin: ['http://localhost:5173'],
+    origin: [
+      'http://localhost:5173',
+      'https://book-store-mern-pearl.vercel.app/',
+    ],
     credentials: true,
   })
 );
