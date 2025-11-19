@@ -13,7 +13,7 @@ const navigations = [
   { name: 'Orders', href: '/orders' },
   {
     name: 'Cart Page',
-    href: '/cartpage',
+    href: '/cart',
   },
   { name: 'Check Out', href: '/checkout' },
 ];
