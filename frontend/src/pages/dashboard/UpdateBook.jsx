@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import InputField from '../../pages/dashboard/InputField';
 import SelectField from '../../pages/dashboard/SelectField';
 import { useForm } from 'react-hook-form';
@@ -22,6 +22,53 @@ const UpdateBook = () => {
     refetch,
   } = useFetchBookByIdQuery(id);
   // console.log(bookData)
+
+  const [imageloading, setImageLoading] = useState(false);
+  const [image, setImage] = useState('');
+  const [imagePreview, setImagePreview] = useState('');
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    // Create preview URL immediately
+    const previewURL = URL.createObjectURL(file);
+    setImagePreview(previewURL);
+
+    setImageLoading(true);
+    const data = new FormData();
+    data.append('file', file);
+    data.append('upload_preset', 'construction');
+    data.append('cloud_name', 'dpb8lbskr');
+
+    const res = await fetch(
+      ' https://api.cloudinary.com/v1_1/dpb8lbskr/image/upload',
+      {
+        method: 'POST',
+        body: data,
+      }
+    );
+
+    const uploadedImageURL = await res.json();
+    setImage(uploadedImageURL.url);
+    setImageLoading(false);
+  };
+  // Function to remove image preview
+  const removeImagePreview = () => {
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setImagePreview('');
+    setImage('');
+    // Reset the file input
+    const fileInput = document.querySelector('input[type="file"]');
+
+    if (fileInput) {
+      fileInput.value = '';
+    }
+  };
+
   const [updateBook] = useUpdateBookMutation();
   const { register, handleSubmit, setValue, reset } = useForm();
   useEffect(() => {
@@ -33,6 +80,8 @@ const UpdateBook = () => {
       setValue('oldPrice', bookData.oldPrice);
       setValue('newPrice', bookData.newPrice);
       setValue('coverImage', bookData.coverImage);
+      setImage(bookData.coverImage);
+      setImagePreview(bookData.coverImage);
     }
   }, [bookData, setValue]);
 
@@ -44,7 +93,7 @@ const UpdateBook = () => {
       trending: data.trending,
       oldPrice: Number(data.oldPrice),
       newPrice: Number(data.newPrice),
-      coverImage: data.coverImage || bookData.coverImage,
+      coverImage: image,
     };
     try {
       await axios.put(`${getBaseURL()}/api/books/edit/${id}`, updateBookData, {
@@ -132,13 +181,35 @@ const UpdateBook = () => {
           register={register}
         />
 
-        <InputField
-          label="Cover Image URL"
-          name="coverImage"
-          type="text"
-          placeholder="Cover Image URL"
-          register={register}
-        />
+        {/* Image Preview */}
+        {imagePreview && (
+          <div className="relative inline-block mb-5">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="w-32 h-32 object-cover rounded-lg border border-gray-300"
+            />
+            <button
+              type="button"
+              onClick={removeImagePreview}
+              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-600 transition-colors"
+            >
+              ×
+            </button>
+          </div>
+        )}
+        <div className="mb-4">
+          <label className="block text-sm font-semibold text-gray-700 mb-2">
+            Cover Image
+          </label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={handleFileChange}
+            className="mb-2 w-full"
+          />
+          {imageloading ? 'Uploading' : ' '}
+        </div>
 
         <button
           type="submit"

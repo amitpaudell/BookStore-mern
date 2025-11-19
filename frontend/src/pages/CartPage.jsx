@@ -1,7 +1,7 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
-import getImageURL from '../utils/getImageUrl';
+
 import {
   clearFromCart,
   removeFromCart,
@@ -44,7 +44,7 @@ const CartPage = () => {
                     <div className="h-24 w-24 shrink-0 overflow-hidden rounded-md border border-gray-200">
                       <img
                         alt=""
-                        src={`${getImageURL(product?.coverImage)}`}
+                        src={product.coverImage}
                         className="h-full w-full object-cover object-center"
                       />
                     </div>

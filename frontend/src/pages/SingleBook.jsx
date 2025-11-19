@@ -3,7 +3,6 @@ import { FiShoppingCart } from 'react-icons/fi';
 
 import { useParams } from 'react-router-dom';
 
-import getImageURL from '../utils/getImageUrl';
 import { useDispatch } from 'react-redux';
 import { addToCart } from '../redux/features/cart/cartSlice';
 import { useFetchBookByIdQuery } from '../redux/features/books/booksApi';
@@ -25,11 +24,7 @@ const SingleBook = () => {
 
       <div className="">
         <div>
-          <img
-            src={`${getImageURL(book.coverImage)}`}
-            alt={book.title}
-            className="mb-8"
-          />
+          <img src={book.coverImage} alt={book.title} className="mb-8" />
         </div>
 
         <div className="mb-5">

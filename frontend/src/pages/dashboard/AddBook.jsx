@@ -7,19 +7,22 @@ import Swal from 'sweetalert2';
 import { useAddBookMutation } from '../../redux/features/books/booksApi';
 
 const AddBook = () => {
+  const [imageloading, setImageLoading] = useState(false);
+  const [image, setImage] = useState('');
+  const [imagePreview, setImagePreview] = useState('');
   const {
     register,
     handleSubmit,
     formState: { errors },
     reset,
   } = useForm();
-  const [imageFile, setimageFile] = useState(null);
+
   const [addBook, { isLoading, isError }] = useAddBookMutation();
-  const [imageFileName, setimageFileName] = useState('');
+
   const onSubmit = async (data) => {
     const newBookData = {
       ...data,
-      coverImage: imageFileName,
+      coverImage: image,
     };
     try {
       await addBook(newBookData).unwrap();
@@ -33,21 +36,57 @@ const AddBook = () => {
         confirmButtonText: "Yes, It's Okay!",
       });
       reset();
-      setimageFileName('');
-      setimageFile(null);
     } catch (error) {
       console.error(error);
       alert('Failed to add book. Please try again.');
     }
   };
 
-  const handleFileChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setimageFile(file);
-      setimageFileName(file.name);
+  //Handling a image file input
+
+  const handleFileChange = async (event) => {
+    const file = event.target.files[0];
+
+    if (!file) return;
+
+    // Create preview URL immediately
+    const previewURL = URL.createObjectURL(file);
+    setImagePreview(previewURL);
+
+    setImageLoading(true);
+    const data = new FormData();
+    data.append('file', file);
+    data.append('upload_preset', 'construction');
+    data.append('cloud_name', 'dpb8lbskr');
+
+    const res = await fetch(
+      ' https://api.cloudinary.com/v1_1/dpb8lbskr/image/upload',
+      {
+        method: 'POST',
+        body: data,
+      }
+    );
+
+    const uploadedImageURL = await res.json();
+    setImage(uploadedImageURL.url);
+    setImageLoading(false);
+  };
+
+  // Function to remove image preview
+  const removeImagePreview = () => {
+    if (imagePreview) {
+      URL.revokeObjectURL(imagePreview);
+    }
+    setImagePreview('');
+    setImage('');
+    // Reset the file input
+    const fileInput = document.querySelector('input[type="file"]');
+
+    if (fileInput) {
+      fileInput.value = '';
     }
   };
+
   return (
     <div className="max-w-lg   mx-auto md:p-6 p-3 bg-white rounded-lg shadow-md">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">Add New Book</h2>
@@ -120,6 +159,23 @@ const AddBook = () => {
         />
 
         {/* Cover Image Upload */}
+        {/* Image Preview */}
+        {imagePreview && (
+          <div className="relative inline-block mb-5">
+            <img
+              src={imagePreview}
+              alt="Preview"
+              className="w-32 h-32 object-cover rounded-lg border border-gray-300"
+            />
+            <button
+              type="button"
+              onClick={removeImagePreview}
+              className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full w-6 h-6 flex items-center justify-center text-sm font-bold hover:bg-red-600 transition-colors"
+            >
+              ×
+            </button>
+          </div>
+        )}
         <div className="mb-4">
           <label className="block text-sm font-semibold text-gray-700 mb-2">
             Cover Image
@@ -130,9 +186,6 @@ const AddBook = () => {
             onChange={handleFileChange}
             className="mb-2 w-full"
           />
-          {imageFileName && (
-            <p className="text-sm text-gray-500">Selected: {imageFileName}</p>
-          )}
         </div>
 
         {/* Submit Button */}
