@@ -11,7 +11,7 @@ app.use(
   cors({
     origin: [
       'http://localhost:5173',
-      'https://bookstore-mern-d8ek.onrender.com/',
+      'https://bookstore-mern-frontend-y80h.onrender.com',
     ],
     credentials: true,
   })
