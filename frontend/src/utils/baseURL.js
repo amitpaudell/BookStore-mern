@@ -1,5 +1,5 @@
 const getBaseURL = () => {
-  return 'https://bookstore-mern-backend-wzu0.onrender.com';
+  return 'http://localhost:3000';
 };
 
 export default getBaseURL;
