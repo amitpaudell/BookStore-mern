@@ -171,6 +171,7 @@ const UpdateBook = () => {
           type="number"
           placeholder="Old Price"
           register={register}
+          step="any"
         />
 
         <InputField
@@ -179,6 +180,7 @@ const UpdateBook = () => {
           type="number"
           placeholder="New Price"
           register={register}
+          step="any"
         />
 
         {/* Image Preview */}

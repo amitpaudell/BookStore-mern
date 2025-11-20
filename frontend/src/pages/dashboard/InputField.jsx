@@ -1,6 +1,13 @@
 import React from 'react';
 
-const InputField = ({ label, name, type = 'text', register, placeholder }) => {
+const InputField = ({
+  label,
+  name,
+  type = 'text',
+  register,
+  placeholder,
+  step,
+}) => {
   return (
     <div className="mb-4">
       <label className="block text-sm font-semibold text-gray-700">
@@ -9,6 +16,7 @@ const InputField = ({ label, name, type = 'text', register, placeholder }) => {
       <input
         type={type}
         {...register(name, { required: true })}
+        step={step}
         className=" p-2 border w-full rounded-md focus:outline-none focus:ring focus:border-blue-300"
         placeholder={placeholder}
       />

@@ -147,6 +147,7 @@ const AddBook = () => {
           type="number"
           placeholder="Old Price"
           register={register}
+          step="any"
         />
 
         {/* New Price */}
@@ -156,6 +157,7 @@ const AddBook = () => {
           type="number"
           placeholder="New Price"
           register={register}
+          step="any"
         />
 
         {/* Cover Image Upload */}
