@@ -15,9 +15,7 @@
 }
 
 @layer components{
-  .swiper-button-next {
-    @apply bg-white p-5 rounded-full z-50 shadow-md;
-  }
+
 
   .btn-primary {
     @apply bg-primary px-12 py-2 rounded-md text-base font-secondary font-bold hover:bg-secondary hover:text-white transition-all duration-200 cursor-pointer;
